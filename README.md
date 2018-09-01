@@ -1,12 +1,12 @@
-# react-native-audio-jack
+# react-native-audio-detection
 
 ## Getting started
 
-`$ npm install react-native-audio-jack --save`
+`$ npm install react-native-audio-detection --save`
 
 ### Mostly automatic installation
 
-`$ react-native link react-native-audio-jack`
+`$ react-native link react-native-audio-detection`
 
 ### Important Installation Step For Android
 The line of code below should be added to `AndroidManifest.xml` for the audio jack listener to work.
@@ -17,7 +17,7 @@ The line of code below should be added to `AndroidManifest.xml` for the audio ja
 
 ## Usage
 ```javascript
-import AudioJackManager from 'react-native-audio-jack';
+import AudioJackManager from 'react-native-audio-detection';
 
 // Determine if audio jack is plugged in
 AudioJackManager.isPluggedIn().then(isPluggedIn => console.log(isPluggedIn));
