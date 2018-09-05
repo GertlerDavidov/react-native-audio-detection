@@ -69,7 +69,7 @@ public class AudioJackModule extends ReactContextBaseJavaModule implements Lifec
         AudioManager audioManager = (AudioManager) getReactApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return audioManager.isWiredHeadsetOn();
+            return audioManager.isWiredHeadsetOn() || audioManager.isBluetoothA2dpOn();
         } else {
             AudioDeviceInfo[] devices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
             for (int i = 0; i < devices.length; i++) {
