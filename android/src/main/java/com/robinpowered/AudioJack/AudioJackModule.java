@@ -19,6 +19,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
+import android.util.Log;
 
 public class AudioJackModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
     private static final String MODULE_NAME = "AudioJack";
@@ -68,14 +69,23 @@ public class AudioJackModule extends ReactContextBaseJavaModule implements Lifec
     private String isHeadsetPluggedIn() {
         AudioManager audioManager = (AudioManager) getReactApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
+        Log.i("AudioDeviceInfo", "test");
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             if ( audioManager.isWiredHeadsetOn() || audioManager.isBluetoothA2dpOn() )
                 return "Headphones";
+            else if ( audioManager.isSpeakerphoneOn() )
+                return "BuiltInSpeaker";
+            else
+              return "BuiltInReceiver";
         } else {
             AudioDeviceInfo[] devices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
             for (int i = 0; i < devices.length; i++) {
                 AudioDeviceInfo device = devices[i];
                 Integer currentType = device.getType();
+
+                Log.i("AudioDeviceInfo", "" + currentType);
+
                 if (currentType == AudioDeviceInfo.TYPE_WIRED_HEADSET ||
                         currentType == AudioDeviceInfo.TYPE_WIRED_HEADPHONES ||
                         currentType == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP) {
