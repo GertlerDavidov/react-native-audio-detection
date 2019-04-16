@@ -40,22 +40,28 @@ static NSString * const IS_PLUGGED_IN = @"isPluggedIn";
 {
     [_bridge.eventDispatcher sendDeviceEventWithName:AUDIO_CHANGED_NOTIFICATION
       body:(@{
-          IS_PLUGGED_IN: @([RNAudioJack isAudioJackInUse])
+          IS_PLUGGED_IN: [RNAudioJack isAudioJackInUse]
       })];
 }
 
-+ (BOOL)isAudioJackInUse
++ (NSString *)isAudioJackInUse
 {
     AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
 
     for (AVAudioSessionPortDescription* desc in [route outputs]) {
         if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones] ||
             [[desc portType] isEqualToString:AVAudioSessionPortBluetoothA2DP]) {
-            return YES;
+            return @"Headphones";
+        }
+        if ( [[desc portType] isEqualToString:AVAudioSessionPortBuiltInReceiver]){
+          return @"BuiltInReceiver";
+        }
+        if ( [[desc portType] isEqualToString:AVAudioSessionPortBuiltInSpeaker]){
+          return @"BuiltInSpeaker";
         }
     }
 
-    return NO;
+    return @"unKnown";
 }
 
 - (dispatch_queue_t)methodQueue
@@ -71,7 +77,7 @@ static NSString * const IS_PLUGGED_IN = @"isPluggedIn";
 RCT_EXPORT_METHOD(isPluggedIn:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    resolve(@([RNAudioJack isAudioJackInUse]));
+    resolve([RNAudioJack isAudioJackInUse]);
 }
 
 @end
