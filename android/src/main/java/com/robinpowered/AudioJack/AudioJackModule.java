@@ -65,11 +65,12 @@ public class AudioJackModule extends ReactContextBaseJavaModule implements Lifec
         headsetReceiver = null;
     }
 
-    private boolean isHeadsetPluggedIn() {
+    private String isHeadsetPluggedIn() {
         AudioManager audioManager = (AudioManager) getReactApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return audioManager.isWiredHeadsetOn() || audioManager.isBluetoothA2dpOn();
+            if ( audioManager.isWiredHeadsetOn() || audioManager.isBluetoothA2dpOn() )
+                return "Headphones";
         } else {
             AudioDeviceInfo[] devices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
             for (int i = 0; i < devices.length; i++) {
@@ -78,12 +79,19 @@ public class AudioJackModule extends ReactContextBaseJavaModule implements Lifec
                 if (currentType == AudioDeviceInfo.TYPE_WIRED_HEADSET ||
                         currentType == AudioDeviceInfo.TYPE_WIRED_HEADPHONES ||
                         currentType == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP) {
-                    return true;
+                    return "Headphones";
                 }
+                if (currentType == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE) {
+                    return "BuiltInReceiver";
+                }
+                if (currentType == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER) {
+                    return "BuiltInSpeaker";
+                }
+
             }
         }
 
-        return false;
+        return "unKnown";
     }
 
     @Override
