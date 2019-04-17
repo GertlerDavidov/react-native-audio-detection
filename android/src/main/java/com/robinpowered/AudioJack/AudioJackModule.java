@@ -43,7 +43,7 @@ public class AudioJackModule extends ReactContextBaseJavaModule implements Lifec
             @Override
             public void onReceive(Context context, Intent intent) {
                 int pluggedInState = intent.getIntExtra("state", -1);
-
+                Log.i("handleAudioJack", "tes2t");
                 WritableNativeMap data = new WritableNativeMap();
                 data.putBoolean(IS_PLUGGED_IN, pluggedInState == 1);
 
@@ -69,7 +69,7 @@ public class AudioJackModule extends ReactContextBaseJavaModule implements Lifec
     private String isHeadsetPluggedIn() {
         AudioManager audioManager = (AudioManager) getReactApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
-        Log.i("AudioDeviceInfo", "test");
+        Log.i("handleAudioJack", "test");
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             if ( audioManager.isWiredHeadsetOn() || audioManager.isBluetoothA2dpOn() )
@@ -83,8 +83,6 @@ public class AudioJackModule extends ReactContextBaseJavaModule implements Lifec
             for (int i = 0; i < devices.length; i++) {
                 AudioDeviceInfo device = devices[i];
                 Integer currentType = device.getType();
-
-                Log.i("AudioDeviceInfo", "" + currentType);
 
                 if (currentType == AudioDeviceInfo.TYPE_WIRED_HEADSET ||
                         currentType == AudioDeviceInfo.TYPE_WIRED_HEADPHONES ||
